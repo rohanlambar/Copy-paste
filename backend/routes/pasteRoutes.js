@@ -5,8 +5,8 @@ import { handleCreatePaste, getAllPastes ,handleUpdatePaste , getPaste, deletePa
 
 router.get('/',checkAuth,getAllPastes);
 router.post('/createPaste',checkAuth,handleCreatePaste);
-router.post('/updatePaste',checkAuth,handleUpdatePaste);
-router.post('/getPaste',checkAuth,getPaste);
-router.post('/deletePaste',checkAuth,deletePaste);
+router.put('/updatePaste',checkAuth,handleUpdatePaste);
+router.get('/getPaste',checkAuth,getPaste);
+router.delete('/deletePaste',checkAuth,deletePaste);
 
 export default router;
