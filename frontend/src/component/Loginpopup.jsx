@@ -1,45 +1,59 @@
 import React, { useState } from 'react'
 import { assets  } from '../assets/assets'
 import { NavLink } from 'react-router';
-// import { useAppContext } from '../context/isLoginContext'
+import { useAppContext } from '../context/isLoginContext';
+import toast from 'react-hot-toast';
 const Loginpopup = () => {
-// const {removePopup} = useAppContext()
+const {setShowPopUp,setLoginIn} = useAppContext()
 const [username,setUsername] = useState('');
 const [password,setPassword] = useState('');
-const sendLoginDataToServer = async ()=>{
+
+
+const sendLoginDataToServer = async (e)=>{
+       e.preventDefault(); // Prevent page reload
        try {
          const response = await fetch("http://localhost:8000/login",{
           method: "POST",
           headers : {
             "Content-Type": "application/json",
           },
+          credentials: "include", // ✅ Allows cookies
           body : JSON.stringify({
               username : username,
               password : password,
           }),
         });
+        const data = await response.json();
 
-        const data = response.json();
+        
         if(response.ok){
-          alert("successfully login in ");
+          toast.success("successfully login in ");
+          localStorage.setItem("jwt_token",data.token);
+          setLoginIn(true);
+          setShowPopUp(false);
+          
         }
         else{
-             alert("not able to log in ")
+            
+             toast.error("not able to log in ")
         }
+        setPassword('')
+        setUsername('')
       }
       catch(err){
+            
             console.error("error occured while send login data to server : ",err);
       }
 }
   return (
     <div className=' fixed inset-0 z-[10] flex justify-center  w-full h-full bg-[rgba(54,48,48,0.89)]'>
             <form className=' place-self-center rounded-lg px-6 py-2  shadow-2xl bg-white   max-w-[max(30vw,400px)]'
-            onSubmit={sendLoginDataToServer}>
+            onSubmit={(e) => sendLoginDataToServer(e)}>
                     <div className=' flex flex-col items-center gap-4 '>
                                 <div className='relative flex flex-col justify-center items-center gap-1  p-4' >
                                             <img src={assets.logo} className='w-[150px] my-2 '/>
                                             <img src={assets.cross_icon}
-                                            //   onClick={ removePopup }
+                                              onClick={ ()=>setShowPopUp(false) }
                                             className='absolute top-0 right-0 rounded-[50%] hover:bg-slate-200 p-2 text-center'
                                             />
                                             <h1 className='text-xl font-medium'>Welcome back</h1>

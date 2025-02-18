@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router";
-import { addToPastes } from "../redux/pasteSlice";
+import { addToPaste , updateToPaste } from "../redux/PasteSlice";
+import { useAppContext } from "../context/isLoginContext";
 
 
 
@@ -9,26 +10,61 @@ const Homepage = () => {
     const [title,setTitle] = useState('');
     const [value,setValue] = useState('');
     const [searchParams,setSearchParams] = useSearchParams();
+    const {isLoginIn,setShowPopUp} = useAppContext()
     const pasteId = searchParams.get("pasteId");
+   
+    
     const dispatch = useDispatch();
+
     // defining createPaste function 
+    useEffect(() => {
+      const fetchPaste = async()=>{if(pasteId){
+            try{
+              console.log("inside effect")
+              const response = await fetch('http://localhost:8000/paste/getPaste',{
+              method: "POST",
+              headers : {
+                "Content-Type": "application/json",
+                 "authorization":`bearer ${localStorage.getItem('jwt_token')}`
+              },
+              credentials: "include", // ✅ Allows cookies,
+              body : JSON.stringify({
+                  pasteId : pasteId,
+              }),
+            
+            });
+            const data = await response.json()
+            console.log(data.paste.title)
+            setTitle(data.paste.title);
+            setValue(data.paste.content);
+             }
+            catch(err){
+              console.log("error while getting specific paste ",err)
+
+             }
+      }}
+
+      fetchPaste()
+    }, [pasteId])
+    
     const createPaste = ()=>{
-      
+      if(isLoginIn){
+
       const  paste = {
            title : title,
-           content : value,
+           content : value,  
            _id: pasteId || Date.now().toString(36),
-           createdAt : new Date().toISOString(),
+           
         }
 
       if(pasteId){
 // updating the paste 
-       dispatch(updateToPastes(paste));
+       dispatch(updateToPaste(paste));
 
       } 
       else{
 // creating the paste 
-       dispatch(addToPastes(paste));
+       dispatch(addToPaste(paste));
       }
        
       //after creation or updation 
@@ -36,7 +72,8 @@ const Homepage = () => {
       setTitle('')
       setValue('')
       setSearchParams({});
-     
+     }
+     else (setShowPopUp(true));
     }
 
 
@@ -53,6 +90,7 @@ const Homepage = () => {
               <button 
                   className={pasteId?"rounded-lg bg-blue-400  p-3":"rounded-lg bg-green-400  p-3 "}
                   onClick={createPaste}
+
               >
               { pasteId?"Update My Paste": "Create My Paste"}
               </button>

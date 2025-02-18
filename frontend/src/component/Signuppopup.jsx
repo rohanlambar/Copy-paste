@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { assets  } from '../assets/assets'
 import { NavLink } from 'react-router';
-// import { useAppContext } from '../context/isLoginContext'
+import { useAppContext } from '../context/isLoginContext'
 const Signuppopup = () => {
-// const {removePopup} = useAppContext()
+const {setShowPopUp,} = useAppContext()
 const [username,setUsername] = useState('');
 const [password,setPassword] = useState('');
 const [email,setEmail] = useState('');
+
 const sendSignUpDataToServer = async ()=>{
        try {
          const response = await fetch("http://localhost:8000/signup",{
@@ -41,7 +42,7 @@ const sendSignUpDataToServer = async ()=>{
                                 <div className='relative flex flex-col justify-center items-center gap-1  p-4' >
                                             <img src={assets.logo} className='w-[150px] my-2 '/>
                                             <img src={assets.cross_icon}
-                                            //   onClick={ removePopup }
+                                              onClick={  ()=>setShowPopUp(false) }
                                             className='absolute top-0 right-0 rounded-[50%] hover:bg-slate-200 p-2 text-center'
                                             />
                                             <h1 className='text-xl font-medium'>Welcome back</h1>
@@ -93,7 +94,7 @@ const sendSignUpDataToServer = async ()=>{
                                        
                                     </div>
                                     <button type='submit' className='p-2 bg-[var(--primary-color)] outline-none rounded-lg text-white w-full  hover:bg-[#272eb0] mb-2' > 
-                                        Login </button>
+                                        Signup </button>
                                     <p className='text-[var(--gray)] mb-4'>Already have a account? <span className='text-[var(--primary-color)] text-sm font-bold cursor-pointer hover:underline' >
                                       <NavLink to = '/test'>Login </NavLink>  
                                         </span></p>

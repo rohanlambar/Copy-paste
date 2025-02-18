@@ -6,6 +6,7 @@ import Pastes from './component/Pastes';
 import ViewPaste from './component/ViewPaste';
 import Loginpopup from './component/Loginpopup';
 import Signuppopup from './component/Signuppopup';
+import { useAppContext } from './context/isLoginContext';
 
 // creating routes 
 //homepage -> cretion and updation pastes 
@@ -14,54 +15,42 @@ import Signuppopup from './component/Signuppopup';
 
 
 
-const router = createBrowserRouter(
-  [
-     {
-      path:"/",
-      element:
-      <div>
-         <Navbar/>
-         <Homepage/>
-      </div>
-     },
-     {
-      path:"/pastes",
-      element:
-      <div>
-        <Navbar/>
-        <Pastes/>
-      </div>
-     },
-     {
-      path:"/pastes/:id",
-      element:
-      <div>
-          <Navbar/>
-          <ViewPaste/>
-      </div>
-     },
-     {
-      path:"/test",
-      element:
-      <div>
-          <Navbar/>
-          <Loginpopup/>
-      </div>
-     },
-     {
-      path:"/signup",
-      element:
-      <div>
-          <Navbar/>
-          <Signuppopup/>
-      </div>
-     },
-  ]
-  );
-
 function App() {
  
+  const {showPopUp,setShowPopUp} = useAppContext()
 
+const router = createBrowserRouter(
+    [
+       {
+        path:"/",
+        element:
+        <div>
+           <Navbar/>
+           <Homepage/>
+          {showPopUp && <Loginpopup/>}
+        </div>
+       },
+       {
+        path:"/pastes",
+        element:
+        <div>
+          <Navbar/>
+          <Pastes/>
+        </div>
+       },
+       {
+        path:"/paste/:id",
+        element:
+        <div>
+            <Navbar/>
+            <ViewPaste/>
+        </div>
+       },
+      
+       
+    ]
+    );
+  
 
 
   return (

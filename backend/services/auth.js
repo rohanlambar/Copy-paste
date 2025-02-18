@@ -2,7 +2,7 @@
 // this service deal with sending and getting jwt token 
 import jwt from 'jsonwebtoken'
 const jwtSecret = "rohan@123";
-export const setUserToken  =  (user) => {
+export const setUserToken  =   (user) => {
                 const {username,email} = user;
                 var result = null;
                 const payload = {
@@ -10,7 +10,7 @@ export const setUserToken  =  (user) => {
                     email : email,
                 }
                 try{
-                    result =  jwt.sign(payload,jwtSecret);
+                    result =   jwt.sign(payload,jwtSecret);
                    
                 }
                 catch(err){
@@ -22,16 +22,10 @@ export const setUserToken  =  (user) => {
 }
 
 export const getUserToken = (token) => {
-          var result = null;
-           try{
-            result = jwt.verify(token,jwtSecret);
-            
-           }
-           catch(err){
-            console.error("error occured while getting user token :",err);
-           }
-           finally{
-            return result;
-           }
-
-}
+    try {
+      return jwt.verify(token, jwtSecret); // ✅ No need for `await`
+    } catch (err) {
+      console.error("Error occurred while verifying user token:", err);
+      return null; // Return `null` explicitly on error
+    }
+  };

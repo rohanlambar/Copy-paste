@@ -1,22 +1,32 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { removeFromPastes} from "../redux/pasteSlice";
+// import { removeFromPastes} from "../redux/PasteSlice";
+
 import { NavLink } from "react-router";
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDelete } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FaRegShareSquare } from "react-icons/fa";
 import { IoCopyOutline } from "react-icons/io5";
+import { fetchPaste , deletePaste } from "../redux/PasteSlice";
 const Pastes = () => {
    const [searchBar,setSearchBar] = useState("");
-   const pastes = useSelector((state)=> state.paste.pastes);
-   const filterData = pastes.filter((paste) => paste.title.toString().toLowerCase().includes(searchBar.toLowerCase()));
+   const { pastes , status , error } = useSelector((state)=> state.paste);
+   console.log("pastes ",pastes);
    const dispatch = useDispatch()
 
+   const filterData = pastes.filter((paste) => paste.title.toString().toLowerCase().includes(searchBar.toLowerCase()));
+ 
+
    const handleDeleteBtn= (pasteId)=>{
-           console.log("clicked")
-           dispatch(removeFromPastes(pasteId));
+          
+           dispatch(deletePaste(pasteId));
    }
+
+  useEffect(() => {
+    dispatch(fetchPaste())
+  }, [dispatch])
+  
 
    const convertDateFormat= (str)=>{
          const date = new Date(str)
@@ -66,7 +76,7 @@ const Pastes = () => {
 
                                                       <button className="border border-slate-500 flex justify-center p-2 max-h-[40px] "
                                                       key="view" >
-                                                        <NavLink to={`/paste/${item._id}`}>
+                                                        <NavLink to={`/paste/${item?._id}`}>
                                                         <FaEye className="text-black  hover:text-purple-600 "  />
                                                         </NavLink>
                                                       </button>
@@ -111,6 +121,10 @@ const Pastes = () => {
               )
 
             }
+            {filterData.length === 0? 
+            <div className="text-3xl font-semibold text-slate-400 ml-4 my-6">No Pastes</div>:
+            <></>
+              }
               </div>
           </div>
       </>

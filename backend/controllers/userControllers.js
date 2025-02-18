@@ -19,7 +19,7 @@ export const   handleUserSignUp = async(req,res) =>{
              }
              console.log(data);
              const result = await User.create(data);
-             const token = setUserToken(data);
+             
              if(!token) return res.status(500).json({response : "error while setting token"})
              
              res.status(200).json({response:"successfully user Signed In and token generated"});
@@ -43,8 +43,10 @@ export const handleUserLogin = async (req,res) =>{
                  if(!isPasswordCorrect) return res.status(401).json({response:"wrong credentials"});
                  const token = setUserToken(dataObtained);
                  if(!token) return res.status(500).json({response : "error while setting token"})
-                 res.cookie('jwt_token',token)
-                 return res.status(200).json({response: "successfully Login In token set "});
+                
+                
+                 return res.status(200).json({response: `successfully Login In token set` ,
+                                               token : token });
              }
              catch(err){
                   console.log("error while handling user login : ",err);
