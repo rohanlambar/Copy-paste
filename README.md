@@ -1,7 +1,15 @@
 # Copy&Paste - MERN Stack Note-Taking App
 
 Copy&Paste is a **MERN stack** application that allows authenticated users to create, save, and manage their notes securely. Each user can only access their own notes, ensuring privacy and data security.
+## Screenshots
 
+![Homepage ](screenshots/Homepage.png)
+
+![Login PopUp](screenshots/Login.png)
+
+![SignUp PopUp ](screenshots/Signup.png)
+
+![Saved Notes ](screenshots/Notes.png)
 ## Features
 
 - **User Authentication**: Secure login and registration using JWT.
@@ -90,15 +98,7 @@ npm start
 - `PUT /pastes/updatePaste` - Update a note
 - `DELETE /pastes/deletePaste` - Delete a note
 
-## Screenshots
 
-![Homepage ](screenshots/Homepage.png)
-
-![Login PopUp](screenshots/Login.png)
-
-![SignUp PopUp ](screenshots/Signup.png)
-
-![Saved Notes ](screenshots/Notes.png)
 
 
 
